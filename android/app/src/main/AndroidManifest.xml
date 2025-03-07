@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-            android:label="untitled2"
+            android:label="OpenFoodFacts"
             android:name="${applicationName}"
             android:icon="@mipmap/ic_launcher">
         <activity
