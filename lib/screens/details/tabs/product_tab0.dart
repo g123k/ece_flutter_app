@@ -54,20 +54,11 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
               color: Colors.black.withValues(alpha: _currentScrollProgress),
               colorBlendMode: BlendMode.srcATop,
             ),
-            Positioned.fill(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Scrollbar(
-                  controller: scrollController,
-                  trackVisibility: true,
-                  child: Container(
-                    margin: const EdgeInsetsDirectional.only(
-                      top: ProductPageTab0.kImageHeight - 30.0,
-                    ),
-                    child: const _Body(),
-                  ),
-                ),
-              ),
+            Positioned(
+              top: ProductPageTab0.kImageHeight - 30.0,
+              left: 0.0,
+              right: 0.0,
+              child: const _Body(),
             ),
           ],
         ),
