@@ -54,12 +54,7 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
               color: Colors.black.withValues(alpha: _currentScrollProgress),
               colorBlendMode: BlendMode.srcATop,
             ),
-            Positioned(
-              top: ProductPageTab0.kImageHeight - 30.0,
-              left: 0.0,
-              right: 0.0,
-              child: const _Body(),
-            ),
+            Positioned.fill(child: SingleChildScrollView(child: const _Body())),
           ],
         ),
       ),
@@ -148,6 +143,9 @@ class _Body extends StatelessWidget {
           topStart: Radius.circular(16.0),
           topEnd: Radius.circular(16.0),
         ),
+      ),
+      margin: EdgeInsetsDirectional.only(
+        top: ProductPageTab0.kImageHeight - 16.0,
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
