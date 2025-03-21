@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import 'res/app_colors.dart';
+import 'res/app_icons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,43 +19,50 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Avenir',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: MyDemo(),
+      home: Homepage(),
     );
   }
 }
 
-class MyDemo extends StatelessWidget {
-  const MyDemo({super.key});
+class Homepage extends StatelessWidget {
+  const Homepage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.sizeOf(context).height;
-
     return Scaffold(
-      appBar: AppBar(leading: BackButton()),
+      appBar: AppBar(
+        title: Text('Mes scans'),
+        centerTitle: false,
+        actions: [IconButton(onPressed: () {}, icon: Icon(AppIcons.barcode))],
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(width: double.infinity, height: 100, color: Colors.red),
-            SizedBox(height: screenHeight * 0.2),
-            Text('Let\'s add your card', style: TextStyle()),
-            Text(
-              'Experience the power of financial organization with our platform.',
-              style: TextStyle(),
-            ),
-            SizedBox(height: screenHeight * 0.15),
-            FilledButton(
+            Spacer(flex: 2),
+            SvgPicture.asset('res/svg/ill_empty.svg'),
+            Spacer(flex: 5),
+            Text('Vous n\'avez pas encore scanné de produit'),
+            Spacer(flex: 4),
+            TextButton(
               onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.blue,
+                backgroundColor: AppColors.yellow,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(22.0)),
+                ),
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.add),
-                  SizedBox(width: 8.0),
-                  Text('Add your card'),
+                  Text('Commencer'.toUpperCase()),
+                  const SizedBox(width: 10.0),
+                  Icon(Icons.arrow_right_alt),
                 ],
               ),
             ),
+            Spacer(flex: 2),
           ],
         ),
       ),
