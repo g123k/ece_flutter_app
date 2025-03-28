@@ -1,17 +1,38 @@
 import 'package:ece_app/res/app_colors.dart';
 import 'package:ece_app/screens/details/product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'screens/homepage/homepage.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+GoRouter router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) {
+        return Homepage();
+      },
+    ),
+    GoRoute(
+      path: '/product',
+      builder: (context, state) {
+        return ProductDetails();
+      },
+    ),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Avenir',
@@ -57,7 +78,6 @@ class MyApp extends StatelessWidget {
           indicatorColor: AppColors.blue,
         ),
       ),
-      home: ProductDetails(),
     );
   }
 }

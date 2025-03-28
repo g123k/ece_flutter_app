@@ -2,6 +2,7 @@ import 'package:ece_app/res/app_colors.dart';
 import 'package:ece_app/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -24,7 +25,9 @@ class Homepage extends StatelessWidget {
             Text('Vous n\'avez pas encore scanné de produit'),
             Spacer(flex: 4),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                GoRouter.of(context).push('/product');
+              },
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.blue,
                 backgroundColor: AppColors.yellow,
