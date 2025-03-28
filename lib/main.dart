@@ -11,18 +11,8 @@ void main() {
 
 GoRouter router = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) {
-        return Homepage();
-      },
-    ),
-    GoRoute(
-      path: '/product',
-      builder: (context, state) {
-        return ProductDetails();
-      },
-    ),
+    GoRoute(path: '/', builder: (context, state) => Homepage()),
+    GoRoute(path: '/product', builder: (context, state) => ProductDetails()),
   ],
 );
 

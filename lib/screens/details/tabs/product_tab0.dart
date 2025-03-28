@@ -1,8 +1,9 @@
 import 'package:ece_app/models/product.dart';
+import 'package:ece_app/product_bloc.dart';
 import 'package:ece_app/res/app_colors.dart';
 import 'package:ece_app/res/app_icons.dart';
-import 'package:ece_app/screens/details/product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductPageTab0 extends StatefulWidget {
   static const double kImageHeight = 300.0;
@@ -38,36 +39,35 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
       context,
     );
 
-    return ProductProvider(
-      product: generateProduct(),
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification notification) {
-          _onScroll();
-          return false;
-        },
-        child: SizedBox.expand(
-          child: Stack(
-            children: [
-              Builder(
-                builder: (context) {
-                  return Image.network(
-                    ProductProvider.of(context).product.picture ?? '',
-                    width: double.infinity,
-                    height: ProductPageTab0.kImageHeight,
-                    cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
-                    fit: BoxFit.cover,
-                    color: Colors.black.withValues(
-                      alpha: _currentScrollProgress,
-                    ),
-                    colorBlendMode: BlendMode.srcATop,
-                  );
-                },
-              ),
-              Positioned.fill(
-                child: SingleChildScrollView(child: const _Body()),
-              ),
-            ],
-          ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification notification) {
+        _onScroll();
+        return false;
+      },
+      child: SizedBox.expand(
+        child: Stack(
+          children: [
+            Builder(
+              builder: (context) {
+                return BlocBuilder<ProductBloc, ProductState>(
+                  builder: (BuildContext context, ProductState state) {
+                    return Image.network(
+                      (state as SuccessProductState).product.picture ?? '',
+                      width: double.infinity,
+                      height: ProductPageTab0.kImageHeight,
+                      cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
+                      fit: BoxFit.cover,
+                      color: Colors.black.withValues(
+                        alpha: _currentScrollProgress,
+                      ),
+                      colorBlendMode: BlendMode.srcATop,
+                    );
+                  },
+                );
+              },
+            ),
+            Positioned.fill(child: SingleChildScrollView(child: const _Body())),
+          ],
         ),
       ),
     );
@@ -189,7 +189,9 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final Product product = ProductProvider.of(context).product;
+    final Product product =
+        (BlocProvider.of<ProductBloc>(context).state as SuccessProductState)
+            .product;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -212,8 +214,6 @@ class _Scores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Product product = ProductProvider.of(context).product;
-
     return Container(
       color: AppColors.gray1,
       width: double.infinity,
@@ -233,9 +233,16 @@ class _Scores extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsetsDirectional.only(end: 5.0),
-                      child: _Nutriscore(
-                        nutriscore:
-                            product.nutriScore ?? ProductNutriscore.unknown,
+                      child: BlocBuilder<ProductBloc, ProductState>(
+                        builder: (BuildContext context, ProductState state) {
+                          return _Nutriscore(
+                            nutriscore:
+                                (state as SuccessProductState)
+                                    .product
+                                    .nutriScore ??
+                                ProductNutriscore.unknown,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -251,9 +258,16 @@ class _Scores extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsetsDirectional.only(start: 25.0),
-                      child: _NovaGroup(
-                        novaScore:
-                            product.novaScore ?? ProductNovaScore.unknown,
+                      child: BlocBuilder<ProductBloc, ProductState>(
+                        builder: (BuildContext context, ProductState state) {
+                          return _NovaGroup(
+                            novaScore:
+                                (state as SuccessProductState)
+                                    .product
+                                    .novaScore ??
+                                ProductNovaScore.unknown,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -267,8 +281,14 @@ class _Scores extends StatelessWidget {
               vertical: _verticalPadding,
               horizontal: _horizontalPadding,
             ),
-            child: _EcoScore(
-              ecoScore: product.ecoScore ?? ProductGreenScore.unknown,
+            child: BlocBuilder<ProductBloc, ProductState>(
+              builder: (BuildContext context, ProductState state) {
+                return _EcoScore(
+                  ecoScore:
+                      (state as SuccessProductState).product.ecoScore ??
+                      ProductGreenScore.unknown,
+                );
+              },
             ),
           ),
         ],
@@ -419,7 +439,9 @@ class _Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Product product = ProductProvider.of(context).product;
+    final Product product =
+        (BlocProvider.of<ProductBloc>(context).state as SuccessProductState)
+            .product;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

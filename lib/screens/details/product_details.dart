@@ -1,10 +1,12 @@
 import 'package:ece_app/models/product.dart';
+import 'package:ece_app/product_bloc.dart';
 import 'package:ece_app/res/app_icons.dart';
 import 'package:ece_app/screens/details/tabs/product_tab0.dart';
 import 'package:ece_app/screens/details/tabs/product_tab1.dart';
 import 'package:ece_app/screens/details/tabs/product_tab2.dart';
 import 'package:ece_app/screens/details/tabs/product_tab3.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key});
@@ -14,7 +16,60 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  ProductDetailsCurrentTab _currentTab = ProductDetailsCurrentTab.values.first;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ProductBloc>(
+      create: (_) => ProductBloc('5000159484695'),
+      child: BlocBuilder<ProductBloc, ProductState>(
+        builder: (BuildContext context, ProductState state) {
+          return switch (state) {
+            LoadingProductState() => const _ProductDetailsLoading(),
+            SuccessProductState() => const _ProductDetailsSuccess(),
+            ErrorProductState() => _ProductDetailsError(error: state.error),
+          };
+        },
+      ),
+    );
+  }
+}
+
+class _ProductDetailsLoading extends StatelessWidget {
+  const _ProductDetailsLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+}
+
+class _ProductDetailsError extends StatelessWidget {
+  const _ProductDetailsError({this.error});
+
+  final dynamic error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text(error?.toString() ?? 'Une erreur est survenue')),
+    );
+  }
+}
+
+class _ProductDetailsSuccess extends StatefulWidget {
+  const _ProductDetailsSuccess({super.key});
+
+  @override
+  State<_ProductDetailsSuccess> createState() => _ProductDetailsSuccessState();
+}
+
+class _ProductDetailsSuccessState extends State<_ProductDetailsSuccess> {
+  late ProductDetailsCurrentTab _currentTab;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTab = ProductDetailsCurrentTab.values.first;
+  }
 
   @override
   Widget build(BuildContext context) {
