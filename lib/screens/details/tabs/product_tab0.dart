@@ -1,6 +1,7 @@
 import 'package:ece_app/models/product.dart';
 import 'package:ece_app/res/app_colors.dart';
 import 'package:ece_app/res/app_icons.dart';
+import 'package:ece_app/screens/details/product_details.dart';
 import 'package:flutter/material.dart';
 
 class ProductPageTab0 extends StatefulWidget {
@@ -37,25 +38,36 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
       context,
     );
 
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification notification) {
-        _onScroll();
-        return false;
-      },
-      child: SizedBox.expand(
-        child: Stack(
-          children: [
-            Image.network(
-              'https://images.unsplash.com/photo-1482049016688-2d3e1b311543',
-              width: double.infinity,
-              height: ProductPageTab0.kImageHeight,
-              cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
-              fit: BoxFit.cover,
-              color: Colors.black.withValues(alpha: _currentScrollProgress),
-              colorBlendMode: BlendMode.srcATop,
-            ),
-            Positioned.fill(child: SingleChildScrollView(child: const _Body())),
-          ],
+    return ProductProvider(
+      product: generateProduct(),
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          _onScroll();
+          return false;
+        },
+        child: SizedBox.expand(
+          child: Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  return Image.network(
+                    ProductProvider.of(context).product.picture ?? '',
+                    width: double.infinity,
+                    height: ProductPageTab0.kImageHeight,
+                    cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
+                    fit: BoxFit.cover,
+                    color: Colors.black.withValues(
+                      alpha: _currentScrollProgress,
+                    ),
+                    colorBlendMode: BlendMode.srcATop,
+                  );
+                },
+              ),
+              Positioned.fill(
+                child: SingleChildScrollView(child: const _Body()),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -177,14 +189,15 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final Product product = ProductProvider.of(context).product;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Petits pois et carottes', style: textTheme.displayLarge),
+        Text(product.name ?? '-', style: textTheme.displayLarge),
         const SizedBox(height: 3.0),
-        Text('Cassegrain', style: textTheme.displayMedium),
+        Text(product.brands?.join(', ') ?? '-', style: textTheme.displayMedium),
         const SizedBox(height: 8.0),
       ],
     );
@@ -199,6 +212,8 @@ class _Scores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Product product = ProductProvider.of(context).product;
+
     return Container(
       color: AppColors.gray1,
       width: double.infinity,
@@ -218,7 +233,10 @@ class _Scores extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsetsDirectional.only(end: 5.0),
-                      child: _Nutriscore(nutriscore: ProductNutriscore.A),
+                      child: _Nutriscore(
+                        nutriscore:
+                            product.nutriScore ?? ProductNutriscore.unknown,
+                      ),
                     ),
                   ),
                 ),
@@ -233,7 +251,10 @@ class _Scores extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsetsDirectional.only(start: 25.0),
-                      child: _NovaGroup(novaScore: ProductNovaScore.group1),
+                      child: _NovaGroup(
+                        novaScore:
+                            product.novaScore ?? ProductNovaScore.unknown,
+                      ),
                     ),
                   ),
                 ),
@@ -246,7 +267,9 @@ class _Scores extends StatelessWidget {
               vertical: _verticalPadding,
               horizontal: _horizontalPadding,
             ),
-            child: _EcoScore(ecoScore: ProductGreenScore.A),
+            child: _EcoScore(
+              ecoScore: product.ecoScore ?? ProductGreenScore.unknown,
+            ),
           ),
         ],
       ),
@@ -396,13 +419,15 @@ class _Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Product product = ProductProvider.of(context).product;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _ProductItemValue(label: 'Quantité', value: '200g'),
+        _ProductItemValue(label: 'Quantité', value: product.quantity ?? '-'),
         _ProductItemValue(
           label: 'Vendu',
-          value: 'France',
+          value: product.manufacturingCountries?.join(', ') ?? '-',
           includeDivider: false,
         ),
         const SizedBox(height: 15.0),

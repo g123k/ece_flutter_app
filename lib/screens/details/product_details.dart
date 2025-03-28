@@ -1,3 +1,4 @@
+import 'package:ece_app/models/product.dart';
 import 'package:ece_app/res/app_icons.dart';
 import 'package:ece_app/screens/details/tabs/product_tab0.dart';
 import 'package:ece_app/screens/details/tabs/product_tab1.dart';
@@ -76,4 +77,26 @@ enum ProductDetailsCurrentTab {
   final IconData icon;
 
   const ProductDetailsCurrentTab(this.label, this.icon);
+}
+
+class ProductProvider extends InheritedWidget {
+  const ProductProvider({
+    super.key,
+    required this.product,
+    required super.child,
+  });
+
+  final Product product;
+
+  static ProductProvider of(BuildContext context) {
+    final ProductProvider? result =
+        context.dependOnInheritedWidgetOfExactType<ProductProvider>();
+    assert(result != null, 'No ProductProvider found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(ProductProvider old) {
+    return product != old.product;
+  }
 }
