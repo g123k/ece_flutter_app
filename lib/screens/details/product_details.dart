@@ -56,7 +56,7 @@ class _ProductDetailsError extends StatelessWidget {
 }
 
 class _ProductDetailsSuccess extends StatefulWidget {
-  const _ProductDetailsSuccess({super.key});
+  const _ProductDetailsSuccess();
 
   @override
   State<_ProductDetailsSuccess> createState() => _ProductDetailsSuccessState();

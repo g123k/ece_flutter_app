@@ -1,6 +1,9 @@
 // Event
+import 'package:ece_app/api/openfoodfacts_api.dart';
 import 'package:ece_app/models/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'api/model/product_response.dart';
 
 abstract class ProductEvent {}
 
@@ -19,16 +22,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   }
 
   Future<void> _onLoadProduct(
-    ProductEvent event,
+    LoadProductEvent event,
     Emitter<ProductState> emitter,
   ) async {
     // TODO
     emitter(LoadingProductState());
 
     try {
-      await Future.delayed(Duration(seconds: 2));
+      ProductAPIEntity response = await OpenFoodFactsAPIManager().loadProduct(
+        event.barcode,
+      );
 
-      emitter(SuccessProductState(generateProduct()));
+      emitter(SuccessProductState(response.response.toProduct()));
     } catch (e) {
       emitter(ErrorProductState(e));
     }

@@ -1,9 +1,8 @@
 import 'package:ece_app/res/app_colors.dart';
 import 'package:ece_app/screens/details/product_details.dart';
+import 'package:ece_app/screens/homepage/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'screens/homepage/homepage.dart';
 
 void main() {
   runApp(const MyApp());

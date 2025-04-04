@@ -35,10 +35,6 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = PrimaryScrollController.of(
-      context,
-    );
-
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification notification) {
         _onScroll();

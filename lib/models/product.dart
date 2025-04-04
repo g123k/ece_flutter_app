@@ -1,3 +1,4 @@
+// ignore_for_file: constant_identifier_names
 class Product {
   final String barcode;
   final String? name;
@@ -95,7 +96,24 @@ enum ProductNovaScore { group1, group2, group3, group4, unknown }
 
 enum ProductGreenScore { A, Aplus, B, C, D, E, F, unknown }
 
-enum ProductAnalysis { yes, no, maybe }
+enum ProductAnalysis {
+  yes,
+  no,
+  maybe;
+
+  static ProductAnalysis fromString(String analysis) {
+    switch (analysis) {
+      case 'yes':
+        return ProductAnalysis.yes;
+      case 'no':
+        return ProductAnalysis.no;
+      case 'maybe':
+        return ProductAnalysis.maybe;
+      default:
+        return ProductAnalysis.maybe;
+    }
+  }
+}
 
 Product generateProduct() => Product(
   barcode: '1234567890',
